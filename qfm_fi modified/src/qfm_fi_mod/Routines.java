@@ -28,6 +28,62 @@ import phylonet.tree.model.sti.STITree;
 
 public class Routines {
 
+    public static String mergeTaxaName(String s1, String s2) {
+        if( s1.compareTo(s2) > 0 ){
+            return s1 + "|" + s2;
+        }else{
+            return s2 + "|" + s1;
+        }
+        
+    }
+    public static void SortUsingCustomComp(ArrayList<Quartet> quartets){
+
+        Map<String,Integer> satisfied = new HashMap<String,Integer>();
+        Map<String,Integer> unSatisfied = new HashMap<String,Integer>();
+
+
+        for(Quartet q:quartets){
+            String t1 = mergeTaxaName(q.t1.name, q.t2.name);
+            String t2 = mergeTaxaName(q.t3.name, q.t4.name);
+            String t3 = mergeTaxaName(q.t1.name, q.t3.name);
+            String t4 = mergeTaxaName(q.t2.name, q.t4.name);
+
+            if(satisfied.containsKey(t1)){
+                satisfied.put(t1, satisfied.get(t1) + q.getQFrequency());
+            }else{
+                satisfied.put(t1, q.getQFrequency());
+            }
+
+            if(satisfied.containsKey(t2)){
+                satisfied.put(t2, satisfied.get(t2) + q.getQFrequency());
+            }else{
+                satisfied.put(t2, q.getQFrequency());
+            }
+
+            if(unSatisfied.containsKey(t3)){
+                unSatisfied.put(t3, unSatisfied.get(t3) + q.getQFrequency());
+            }else{
+                unSatisfied.put(t3, q.getQFrequency());
+            }
+
+            if(unSatisfied.containsKey(t4)){
+                unSatisfied.put(t4, unSatisfied.get(t4) + q.getQFrequency());
+            }else{
+                unSatisfied.put(t4, q.getQFrequency());
+            }
+
+        }
+
+        Collections.sort(quartets, new Comparator<Quartet>() {
+            @Override
+            public int compare(Quartet o1, Quartet o2) {
+                int score1 = satisfied.get(mergeTaxaName(o1.t1.name, o1.t2.name)) + satisfied.get(mergeTaxaName(o1.t3.name, o1.t4.name));
+                int score2 = satisfied.get(mergeTaxaName(o2.t1.name, o2.t2.name)) + satisfied.get(mergeTaxaName(o2.t3.name, o2.t4.name));
+                return score2 - score1;
+            }
+        });
+    }
+
     public static String readQuartetQMC(String fileName) { // count will be done at the time of reading
 
         Map<String, Taxa> taxList = new HashMap<String, Taxa>();
@@ -70,8 +126,13 @@ public class Routines {
         ArrayList<Quartet> qr = new ArrayList<Quartet>(quartetList.size());
         qr.addAll(quartetList);
 
+        
+
         quartetList.clear();
-        qr.sort(Comparator.comparing(Quartet::getQFrequency, Collections.reverseOrder()));
+        
+        SortUsingCustomComp(qr);
+       // qr.sort(Comparator.comparing(Quartet::getQFrequency, Collections.reverseOrder()));
+
         long sortingTime = System.currentTimeMillis() - startTime - estimatedTime;
         System.out.println("Sorting Time : " + sortingTime / 1000 + " seconds");
 
@@ -305,11 +366,14 @@ public class Routines {
 
             ArrayList<Quartet> qrA = new ArrayList<Quartet>(quartetSetA);
             quartetSetA.clear();
-            qrA.sort(Comparator.comparing(Quartet::getQFrequency, Collections.reverseOrder()));
+
+            SortUsingCustomComp(qrA);
+            //qrA.sort(Comparator.comparing(Quartet::getQFrequency, Collections.reverseOrder()));
 
             ArrayList<Quartet> qrB = new ArrayList<Quartet>(quartetSetB);
             quartetSetB.clear();
-            qrB.sort(Comparator.comparing(Quartet::getQFrequency, Collections.reverseOrder()));
+            SortUsingCustomComp(qrB);
+            //qrB.sort(Comparator.comparing(Quartet::getQFrequency, Collections.reverseOrder()));
 
             if (extraTaxa == 1001) {
                 final int ext = extraTaxa, psc = partSatCount;
@@ -335,6 +399,7 @@ public class Routines {
 
         return s;
     }
+    
 
     private static String merge(String s1, String s2, String extra) {
 
