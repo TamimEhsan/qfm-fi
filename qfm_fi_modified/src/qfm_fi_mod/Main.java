@@ -13,8 +13,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		long startTime = System.currentTimeMillis();
-		String quartetType = "1";
-		String inputFile = "sampleIO/27_ecoli.txt";
+		String quartetType = "2";
+		String inputFile = "g:/Research/Dataset_Simulated/37-taxon/noscale.25g.500b/R2/weighted_quartets";
 		String outputFile = "IO/output_mod.txt";
 		System.out.println("args.length = "+ args.length);
 		

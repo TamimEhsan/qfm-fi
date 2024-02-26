@@ -47,6 +47,9 @@ public class Routines {
             String t2 = mergeTaxaName(q.t3.name, q.t4.name);
             String t3 = mergeTaxaName(q.t1.name, q.t3.name);
             String t4 = mergeTaxaName(q.t2.name, q.t4.name);
+            String t5 = mergeTaxaName(q.t1.name, q.t4.name);
+            String t6= mergeTaxaName(q.t2.name, q.t3.name);
+
 
             if(satisfied.containsKey(t1)){
                 satisfied.put(t1, satisfied.get(t1) + q.getQFrequency());
@@ -72,13 +75,65 @@ public class Routines {
                 unSatisfied.put(t4, q.getQFrequency());
             }
 
+            if(unSatisfied.containsKey(t5)){
+                unSatisfied.put(t5, unSatisfied.get(t5) + q.getQFrequency());
+            }else{
+                unSatisfied.put(t5, q.getQFrequency());
+            }
+
+            if(unSatisfied.containsKey(t6)){
+                unSatisfied.put(t6, unSatisfied.get(t6) + q.getQFrequency());
+            }else{
+                unSatisfied.put(t6, q.getQFrequency());
+            }
+
         }
 
         Collections.sort(quartets, new Comparator<Quartet>() {
             @Override
             public int compare(Quartet o1, Quartet o2) {
-                int score1 = satisfied.get(mergeTaxaName(o1.t1.name, o1.t2.name)) + satisfied.get(mergeTaxaName(o1.t3.name, o1.t4.name));
-                int score2 = satisfied.get(mergeTaxaName(o2.t1.name, o2.t2.name)) + satisfied.get(mergeTaxaName(o2.t3.name, o2.t4.name));
+                int score1 = (satisfied.getOrDefault(mergeTaxaName(o1.t1.name, o1.t2.name),0) 
+                            + satisfied.getOrDefault(mergeTaxaName(o1.t3.name, o1.t4.name),0)
+                                )*4
+                            + (
+                                unSatisfied.getOrDefault(mergeTaxaName(o1.t1.name, o1.t3.name),0) 
+                            + unSatisfied.getOrDefault(mergeTaxaName(o1.t1.name, o1.t4.name),0)   
+                            + unSatisfied.getOrDefault(mergeTaxaName(o1.t2.name, o1.t3.name),0)
+                            + unSatisfied.getOrDefault(mergeTaxaName(o1.t2.name, o1.t4.name),0)
+                            )/2
+                            - (
+                                unSatisfied.getOrDefault(mergeTaxaName(o1.t1.name, o1.t2.name),0)
+                            + unSatisfied.getOrDefault(mergeTaxaName(o1.t3.name, o1.t4.name),0)
+                            )*4
+                            - (
+                                satisfied.getOrDefault(mergeTaxaName(o1.t1.name, o1.t3.name),0)
+                            + satisfied.getOrDefault(mergeTaxaName(o1.t1.name, o1.t4.name),0)
+                            + satisfied.getOrDefault(mergeTaxaName(o1.t2.name, o1.t3.name),0)
+                            + satisfied.getOrDefault(mergeTaxaName(o1.t2.name, o1.t4.name),0)
+                            )/2
+                            ;
+                            
+                        
+                int score2 = (satisfied.getOrDefault(mergeTaxaName(o2.t1.name, o2.t2.name),0) 
+                            + satisfied.getOrDefault(mergeTaxaName(o2.t3.name, o2.t4.name),0)
+                                )*4
+                            + (
+                                unSatisfied.getOrDefault(mergeTaxaName(o2.t1.name, o2.t3.name),0)
+                            + unSatisfied.getOrDefault(mergeTaxaName(o2.t1.name, o2.t4.name),0)
+                            + unSatisfied.getOrDefault(mergeTaxaName(o2.t2.name, o2.t3.name),0)
+                            + unSatisfied.getOrDefault(mergeTaxaName(o2.t2.name, o2.t4.name),0)
+                            )/2
+                            - (
+                                unSatisfied.getOrDefault(mergeTaxaName(o2.t1.name, o2.t2.name),0)
+                            + unSatisfied.getOrDefault(mergeTaxaName(o2.t3.name, o2.t4.name),0)
+                            )*4
+                            - (
+                                satisfied.getOrDefault(mergeTaxaName(o2.t1.name, o2.t3.name),0)
+                            + satisfied.getOrDefault(mergeTaxaName(o2.t1.name, o2.t4.name),0)
+                            + satisfied.getOrDefault(mergeTaxaName(o2.t2.name, o2.t3.name),0)
+                            + satisfied.getOrDefault(mergeTaxaName(o2.t2.name, o2.t4.name),0)
+                            )/2
+                            ;
                 return score2 - score1;
             }
         });

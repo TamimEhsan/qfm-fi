@@ -13,20 +13,23 @@ public class Main {
 
 	public static void main(String[] args) {
 		long startTime = System.currentTimeMillis();
-		String quartetType = "1";
-		String inputFile = "sampleIO/27_ecoli.txt";
+		String quartetType = "2";
+		String inputFile = "g:/Research/Dataset_Simulated/37-taxon/noscale.25g.500b/R2/weighted_quartets";
 		String outputFile = "IO/output_org.txt";
 		System.out.println("args.length = "+ args.length);
 		
 		if (args.length >= 1) {
 			inputFile = args[0];
 		}
+
 		if (args.length >= 2) {
-			outputFile = args[1];
+			quartetType = args[1];
 		}
+
 		if (args.length >= 3) {
-			quartetType = args[2];
+			outputFile = args[2];
 		}
+		
 		String s = "";
 		switch (quartetType) {
 		case "1":
