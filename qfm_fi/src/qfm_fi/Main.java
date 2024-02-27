@@ -23,12 +23,16 @@ public class Main {
 		}
 
 		if (args.length >= 2) {
-			quartetType = args[1];
+			outputFile = args[1];
 		}
 
 		if (args.length >= 3) {
-			outputFile = args[2];
+			quartetType = args[2];
 		}
+
+		System.out.println(inputFile);
+		System.out.println(outputFile);
+
 		
 		String s = "";
 		switch (quartetType) {
