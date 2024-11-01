@@ -28,6 +28,7 @@ import phylonet.tree.model.sti.STITree;
 
 public class Routines {
 
+    /* 
     public static String mergeTaxaName(String s1, String s2) {
         if( s1.compareTo(s2) > 0 ){
             return s1 + "|" + s2;
@@ -138,6 +139,7 @@ public class Routines {
             }
         });
     }
+    */
 
     public static String readQuartetQMC(String fileName) { // count will be done at the time of reading
 
@@ -185,8 +187,8 @@ public class Routines {
 
         quartetList.clear();
         
-        SortUsingCustomComp(qr);
-       // qr.sort(Comparator.comparing(Quartet::getQFrequency, Collections.reverseOrder()));
+        // SortUsingCustomComp(qr);
+        qr.sort(Comparator.comparing(Quartet::getQFrequency, Collections.reverseOrder()));
 
         long sortingTime = System.currentTimeMillis() - startTime - estimatedTime;
         System.out.println("Sorting Time : " + sortingTime / 1000 + " seconds");
@@ -422,13 +424,13 @@ public class Routines {
             ArrayList<Quartet> qrA = new ArrayList<Quartet>(quartetSetA);
             quartetSetA.clear();
 
-            SortUsingCustomComp(qrA);
-            //qrA.sort(Comparator.comparing(Quartet::getQFrequency, Collections.reverseOrder()));
+            // SortUsingCustomComp(qrA);
+            qrA.sort(Comparator.comparing(Quartet::getQFrequency, Collections.reverseOrder()));
 
             ArrayList<Quartet> qrB = new ArrayList<Quartet>(quartetSetB);
             quartetSetB.clear();
-            SortUsingCustomComp(qrB);
-            //qrB.sort(Comparator.comparing(Quartet::getQFrequency, Collections.reverseOrder()));
+            // SortUsingCustomComp(qrB);
+            qrB.sort(Comparator.comparing(Quartet::getQFrequency, Collections.reverseOrder()));
 
             if (extraTaxa == 1001) {
                 final int ext = extraTaxa, psc = partSatCount;
